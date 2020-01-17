@@ -94,7 +94,6 @@ export default {
 
 <style lang="scss" scoped>
 .search_outer {
-  width: 100vw;
   height: 50px;
   // overflow: hidden;
   .search {

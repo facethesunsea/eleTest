@@ -1,31 +1,36 @@
 <template>
   <div
     class="order-outer"
-    :class="{vertical:vertical, horizontal:!(vertical), 'one-third': oneThird&&vertical}"
+    :class="{vertical:vertical, horizontal:!(vertical), 'pic-small':picSmall}"
+    :style="{borderWidth: widthSize + 'px'}"
   >
-    <div class="image">
+    <div class="order-image">
       <img :src="imgSrc" />
     </div>
-    <div class="content">
+    <div class="order-content">
       <div v-if="vertical" class="smaller">
-        <p :class="{normal: !oneThird}">{{ name }}</p>
-        <p v-if="!oneThird">月售{{ monthlySale }} 好评率{{ favorableRate }}%</p>
-        <p class="red weight">
-          ￥{{price }}
-          <span class="right">
-            <svg-icon v-if="!oneThird" icon-class="plus" outer-name="small-size"></svg-icon>
-          </span>
-        </p>
+        <div>{{ name }}</div>
+        <div v-if="showSaleInfo">月售{{ monthlySale }} 好评率{{ favorableRate }}%</div>
+        <div v-if="distance">
+          <van-icon name="location" color="#1E90FF" size="1em" />
+          <span>{{distance}}m</span>
+        </div>
+        <div class="weight">
+          <span>{{description}}</span>
+        </div>
       </div>
       <div v-else>
-        <p class="weight">{{ name }}</p>
-        <p class="smaller lineTwo">{{ description}}</p>
-        <p class="smaller lineTwo">月售{{ monthlySale }} 好评率{{ favorableRate }}%</p>
+        <div class="weight">{{ name }}</div>
+        <div class="smaller line-height">{{ description}}</div>
+        <div class="smaller line-height">
+          <span>月售{{ monthlySale }}</span>
+          <span>好评率{{ favorableRate }}%</span>
+        </div>
         <div class="bottom">
           <span class="weight red">￥{{price }}</span>
           <div class="right">
-            <svg-icon class="top" icon-class="minus" @click="buyNumber = buyNumber>0?buyNumber-1:0"></svg-icon>
-            <span class="widthFRem">{{ buyNumber }}</span>
+            <svg-icon icon-class="minus" @click="buyNumber = buyNumber>0?buyNumber-1:0"></svg-icon>
+            <span class="width-buy-number">{{ buyNumber }}</span>
             <svg-icon icon-class="plus" @click="buyNumber = buyNumber+1"></svg-icon>
           </div>
         </div>
@@ -43,128 +48,117 @@ export default {
   },
   props: {
     imgSrc: {
-      default: "",
-      required: true
+      default: require("@/assets/image4.jpg"),
+      // required: true
     },
     name: {
-      default: "sdfa大声道GG",
-      required: true
+      default: "大声道GG",
+      // required: true
     },
     price: {
       default: 7,
-      required: true
+      // required: true
     },
     monthlySale: {
       default: 432,
-      required: true
+      // required: true
     },
     favorableRate: {
       default: 89,
-      required: true
+      // required: true
     },
     description: {
-      default: "fadffafa等方法",
-      required: true
+      default: "这里是相关描述",
+      // required: true
     },
-    vertical: {
+    vertical: {   // 垂直展示
       default: false
     },
-    oneThird: {
+    showSaleInfo: {   // 展示销售信息
+      default: false
+    },
+    picSmall: {    // 垂直展示时  图片是否不占满格
       default: true
+    },
+    widthSize: {  // border边框宽度
+      default: 0
+    },
+    distance: {
+      default: 0
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.widthFRem {
-  display: inline-block;
-  width: 3rem;
-  text-align: center;
-}
-.red {
-  color: red;
-}
-svg {
-  position: relative;
-  padding: 0 5px;
-  border: 1px solid #ffffff;
-}
-.weight {
-  font-weight: 600;
-  line-height: 2;
-}
-.lineTwo {
-  line-height: 2;
-}
-.right {
-  float: right;
-  position: relative;
-  right: 1%;
-  line-height: 2;
-  vertical-align: middle;
-}
-.bottom {
-  position: absolute;
-  bottom: 5%;
-  width: 100%;
-}
-.vertical {
-  .image {
-    width: 100%;
-    padding-top: 100%;
+$width: 20vw;
+$padding: 4vw;
+.order-outer {
+  border-style: solid;
+  border-color: #eeeeee;
+  border-width: 0px;
+  &.vertical {
+    width: $width;
+    text-align: center;
+  }
+  &.pic-small {
+    .order-image {
+      padding: $padding;
+    }
+    .order-content {
+      margin-top: -$padding;
+      padding-top: 3px;
+    }
+  }
+  &.horizontal {
+    display: flex;
+    .order-content {
+      flex: 1 1 auto;
+      margin: 0 10px;
+      position: relative;
+    }
+  }
+  .order-image {
+    width: $width;
+    height: $width;
     img {
       width: 100%;
       height: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
     }
   }
-  .content {
-    width: 100%;
-  }
-}
-.horizontal {
-  display: flex;
-  .image {
-    width: 33%;
-    padding-top: 33%;
-    img {
-      width: 90%;
-      height: 90%;
-      position: absolute;
-      top: 5%;
-      left: 5%;
+  .order-content {
+    padding: 5px;
+    div {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      line-height: 1.2rem;
+      .red {
+        color: red;
+      }
+      .weight {
+        font-weight: 600;
+      }
+      .line-height {
+        line-height: 1.5;
+      }
+      .bottom {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        .right {
+          float: right;
+          line-height: 1;
+          .width-buy-number {
+            padding: 0 15px;
+            text-align: center;
+          }
+        }
+      }
+      .van-icon{
+        vertical-align: -1px;
+      }
     }
-  }
-  .content {
-    width: 65%;
-    margin-left: 2%;
-    position: relative;
-  }
-}
-.one-third {
-  width: 33% !important;
-  .image{
-    padding-top: 100%;
-  }
-}
-.order-outer {
-  width: 100%;
-  height: 100%;
-  padding: 2%;
-  box-sizing: border-box;
-  .image {
-    height: 0;
-    position: relative;
-  }
-  .content  p{
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    text-align: left;
-    line-height: 1.1rem;
   }
 }
 </style>

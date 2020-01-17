@@ -1,19 +1,19 @@
 <template>
-  <div class="search_inner">
-    <svg-icon class="search_icon" icon-class="search"></svg-icon>
+  <div class="search-inner">
+    <svg-icon class="search-icon" icon-class="search"></svg-icon>
     <input
-      class="input_search"
-      :value="value"
-      @input="$emit('input', $event.target.value, search)"
-      @compositionstart="search=false"
-      @compositionend="search=true"
+      class="input-search"
+      :value="inputValue"
+      @input="$emit('input-search', $event.target.value, searchStart)"
+      @compositionstart="searchStart=false"
+      @compositionend="searchStart=true"
       :placeholder="placeholder"
       v-focus
     />
     <svg-icon
-      :class="{close_icon:true, none:!(value.length) && show}"
+      :class="{'close-icon':true, none:!(inputValue.length) && showClose}"
       icon-class="close"
-      @click="$emit('input', '', search)"
+      @click="$emit('input-search', '', searchStart)"
     ></svg-icon>
   </div>
 </template>
@@ -21,26 +21,26 @@
 <script>
 export default {
   name: "SearchInput",
-  data(){
+  data() {
     return {
-      search: true
-    }
+      searchStart: true
+    };
   },
   props: {
     placeholder: {
       default: "搜索"
     },
-    value: {
+    inputValue: {
       default: ""
     },
-    show: {
+    showClose: {
       default: true
     }
   },
-  watch:{
-    search(value){
-      if(value){
-        this.$emit('input', this.value, this.search)
+  watch: {
+    searchStart(value) {
+      if (value) {
+        this.$emit("input-search", this.inputValue, this.searchStart);
       }
     }
   },
@@ -54,42 +54,38 @@ export default {
       }
     }
   },
-  methods: {
-  }
+  methods: {}
 };
 </script>
 
 <style lang="scss" scoped>
-$height: 35px;
+$height: 30px;
 $background-color: #dddddd;
 .none {
   display: none;
 }
-.search_inner {
+.search-inner {
   background: $background-color;
-  width: calc(100% - 20px);
+  width: 100%;
   height: $height;
   border: 1.2px solid $background-color;
-  box-sizing: border-box;
-  margin: 0 10px 0 10px;
   border-radius: 20px;
   overflow: hidden;
   position: relative;
-  .search_icon,
-  .close_icon {
+  .search-icon,
+  .close-icon {
     width: 20px;
     height: 70%;
     position: absolute;
     top: 15%;
-    // border: 1px solid #00ff00;
   }
-  .search_icon {
+  .search-icon {
     left: 10px;
   }
-  .close_icon {
+  .close-icon {
     right: 10px;
   }
-  .input_search {
+  .input-search {
     background: $background-color;
     display: inline-block;
     position: absolute;
@@ -100,7 +96,6 @@ $background-color: #dddddd;
     font-size: 0.9rem;
     line-height: 100%;
     border-style: none;
-    // border: 1px solid #ff00ff;
     text-align: left;
     outline: none;
     padding: 0 3px;

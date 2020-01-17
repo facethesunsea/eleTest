@@ -3,6 +3,13 @@
     margin: 0;
 }
 
+div, p, form, table, thead, tfoot, 
+header, section, article, aside, footer, address,
+audio, video, blockquote, canvas, hgroup, h1,h2,h3,h4,h5,h6,hr,
+figure, figcaption, fieldset, ol, ul, li, dd, dl{
+    box-sizing: border-box;
+}
+
 p{
     letter-spacing: 0.06rem;
 }
@@ -29,3 +36,5 @@ p{
     white-space:nowrap;
     text-overflow: ellipsis;
 }
+
+$lightBlue: #1e90ff;

@@ -1,49 +1,53 @@
 <template>
-  <div class="outer-shop-simple">
-    <div class="image">
+  <div class="outer-shop-complex">
+    <div class="shop-complex-image">
       <img :src="imageSrc" />
     </div>
-    <div class="content">
-      <p>{{ shopName }}</p>
-      <p class="smaller">
+    <div class="shop-complex-content">
+      <div>{{ shopName }}</div>
+      <div class="smaller">
         <svg-icon icon-class="collet" outer-name="small-size"></svg-icon>
         <span class="red">{{ rate }}</span>
-        月售{{numbers}}
-      </p>
-      <p class="smaller">
+        <span>月售{{numbers}}</span>
+      </div>
+      <div class="smaller">
         <span>起送￥{{ startPrice }}</span>
         <span>远距离配送￥{{ fare }}</span>
         <span style="float:right">
           <span class="right">{{useTime}}分钟</span>
           <span class="right">{{distance}}km</span>
         </span>
-      </p>
+      </div>
+      <div v-if="userEvaluate" class="show-evaluate">“ {{userEvaluate}} ”</div>
       <div class="show-reduct" :class="{'show-all': ShowAllInfo}">
         <div style="width:90%;display:inline-block">
           <mark-button
-            v-for="fr in fullReduction"
-            :key="fr"
+            v-for="(fr,index) in fullReduction"
+            :key="index"
             class="margin-right"
             :value="fr"
             class-check="reduct"
           ></mark-button>
         </div>
-        <svg-icon
-          v-if="!ShowAllInfo"
-          @click="ShowAllInfo=true"
-          class="svg-icon"
-          icon-class="drop-down-arrow"
-          outer-name="smaller-size"
-        ></svg-icon>
-        <svg-icon
-          v-else
-          @click="ShowAllInfo=false"
-          class="svg-icon"
-          icon-class="pull-up-arrow"
-          outer-name="smaller-size"
-        ></svg-icon>
+        <div style="width:auto;display:inline-block" v-if="fullReduction.length>5">
+          <!-- <span>{{fullReduction.length}}</span> -->
+          <svg-icon
+            v-if="!ShowAllInfo"
+            @click="ShowAllInfo=true"
+            class="svg-icon"
+            icon-class="drop-down-arrow"
+            outer-name="smaller-size"
+          ></svg-icon>
+          <svg-icon
+            v-else
+            @click="ShowAllInfo=false"
+            class="svg-icon"
+            icon-class="pull-up-arrow"
+            outer-name="smaller-size"
+          ></svg-icon>
+        </div>
       </div>
-      <div class="show-image">
+      <div v-if="!simpleShow" class="show-image">
         <OrderItem
           v-for="item in foodItems"
           :key="item.imageSrc"
@@ -76,6 +80,10 @@ export default {
     };
   },
   props: {
+    simpleShow: {
+      // 是否要展示店铺里的图片商品
+      default: true // true   false
+    },
     imageSrc: {
       default: "",
       required: true
@@ -107,6 +115,9 @@ export default {
     hummer: {
       default: false
     },
+    userEvaluate: {
+      default: ""
+    },
     fullReduction: {
       default: [
         "32减21",
@@ -124,44 +135,37 @@ export default {
       ]
     },
     foodItems: {
-      default: [
-        {
-          imgSrc: "111",
-          name: "sdfa大声道GG",
-          price: 7,
-          monthlySale: 432,
-          favorableRate: 89,
-          description: "fadffafa等方法",
-          vertical: true
-        },
-        {
-          imgSrc: "222",
-          name: "sdfa大声道GG",
-          price: 7,
-          monthlySale: 432,
-          favorableRate: 89,
-          description: "fadffafa等方法",
-          vertical: true
-        },
-        {
-          imgSrc: "333",
-          name: "sdfa大声道GG",
-          price: 7,
-          monthlySale: 432,
-          favorableRate: 89,
-          description: "fadffafa等方法",
-          vertical: true
-        },
-        {
-          imgSrc: "444",
-          name: "sdfa大声道GG",
-          price: 7,
-          monthlySale: 432,
-          favorableRate: 89,
-          description: "fadffafa等方法",
-          vertical: true
-        }
-      ]
+      default() {
+        return [
+          {
+            imgSrc: require("@/assets/image4.jpg"),
+            name: "大声道GG",
+            price: 7,
+            monthlySale: 432,
+            favorableRate: 89,
+            description: "描述描述",
+            vertical: true
+          },
+          {
+            imgSrc: require("@/assets/image7.jpg"),
+            name: "大声道GG",
+            price: 7,
+            monthlySale: 432,
+            favorableRate: 89,
+            description: "描述描述",
+            vertical: true
+          },
+          {
+            imgSrc: require("@/assets/image2.jpg"),
+            name: "大声道GG",
+            price: 7,
+            monthlySale: 432,
+            favorableRate: 89,
+            description: "描述描述",
+            vertical: true
+          }
+        ];
+      }
     }
   },
   computed: {
@@ -177,32 +181,27 @@ $height: 20vw;
 .red {
   color: red;
 }
-.outer-shop-simple {
-  padding: $height/8;
-  width: 100vw;
+.outer-shop-complex {
+  padding: 10px 0;
   display: flex;
-  box-sizing: border-box;
-  .image {
+  .shop-complex-image {
+    min-width: $height;
     width: $height;
     height: $height;
-    position: relative;
-    margin-right: $height/8;
+    margin-right: 10px;
     img {
       width: 100%;
       height: 100%;
-      position: absolute;
-      top: 0;
-      left: 0;
     }
   }
-  .content {
-    width: 100vw - $height/4 - $height -$height/8;
+  .shop-complex-content {
+    flex: 1 1 auto;
     min-height: $height;
-    box-sizing: border-box;
-    text-align: left;
-    line-height: 1.5;
+    line-height: 1.6;
+    padding-bottom: 6px;
     border-bottom: 1px solid #dddddd;
-    p span {
+    overflow: hidden;
+    div span {
       display: inline-block;
       margin-right: 0.5rem;
       .right {
@@ -210,36 +209,43 @@ $height: 20vw;
         margin-right: 0;
       }
     }
+    .show-evaluate {
+      margin: 8px 0 3px;
+    }
     .show-reduct {
-      height: 1.5rem;
-      position: relative;
+      line-height: 1.6;
+      height: 1rem * 1.6;
       overflow: hidden;
+      position: relative;
       .svg-icon {
         position: absolute;
-        top: 0.25rem;
+        top: 0.5rem;
       }
     }
     .show-all {
       height: auto !important;
     }
 
-    .shop_name {
+    .shop-name {
       width: 100%;
       line-height: 1.5;
-      height: $height / 2;
+      // height: $height / 2;
     }
     .info {
       width: 100%;
-      height: $height / 3;
+      // height: $height / 3;
     }
     .margin-right {
       margin-right: 1vw;
     }
     .show-image {
-      // background: red;
-      // width: 33%;
+      padding: 5px 0;
       display: flex;
       overflow: hidden;
+      justify-content: space-between;
+      & > div {
+        flex: 0 0 auto;
+      }
     }
   }
 }

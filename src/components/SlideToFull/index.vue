@@ -92,7 +92,6 @@ export default {
 
 <style lang="scss" scoped>
 .outer-full {
-  width: 100vw;
   height: 100vh+10vh;
   overflow: hidden;
   background: rgba(0, 0, 0, 0.3);

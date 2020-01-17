@@ -3,15 +3,16 @@ import Router from 'vue-router'
 
 Vue.use(Router)
 
+
 export default new Router({
   mode: 'history',
-  base: process.env.BASE_URL,
+  base: '/index/',
   routes: [
-    {
-      path: '/',
-      name: 'home',
-      // component: () => import('@/views/Home.vue')
-    },
+    // {
+    //   path: '/',
+    //   name: 'home',
+    //   // component: () => import('@/views/Home.vue')
+    // },
     // {
     //   path: '/about',
     //   name: 'about',
@@ -21,9 +22,9 @@ export default new Router({
     //   component: () => import(/* webpackChunkName: "about" */ '@/views/About.vue')
     // },
     {
-      path: '/test',
-      name: 'test',
-      component: () => import('@/views/Test')
+      path: '/',
+      name: 'index',
+      component: () => import('@/components/TabSticky')
     }
   ]
 })

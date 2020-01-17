@@ -7,6 +7,14 @@ export function fetchStore() {
     })
 }
 
+export function fetchRecommend(datas) {
+    return request({
+        url: '/store/recommend',
+        method: 'post',
+        data: datas
+    })
+}
+
 export function fetchStoreByCheck(query) {
     return request({
         url: '/store/search',

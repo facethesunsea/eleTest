@@ -6,7 +6,7 @@
     @touchmove="touchMove"
     @touchend="touchEnd"
   >
-    <div class="inner-slide" v-for="src in imgData" :key="src">
+    <div class="inner-slide" ref="slideImg" v-for="src in imgData" :key="src">
       <img :src="src" />
     </div>
   </div>
@@ -17,7 +17,6 @@
   参数说明：
     imgData: 传入的图片
     loop: 是否循环播放 循环：自动播放+手动滑动  不循环：手滑+图片不循环
-    slideStop: 不支持循环播放的前提下 是否手指滑到哪停到哪
 */
 export default {
   data() {
@@ -39,22 +38,22 @@ export default {
     },
     loop: {
       default: true
-    },
-    slideStop: {
-      default: false,
-      type: Boolean
     }
   },
   created() {},
   mounted() {
-    this.imgs = this.$refs.slide.querySelectorAll(".inner-slide");
-    this.widthImg = this.$refs.slide.offsetWidth;
-    this.imgs.forEach((img, index) => {
-      img.style.left = this.widthImg * index + "px";
-    });
+    this.initWidth();
     this.loop && this.autoSlide();
+    window.addEventListener("resize", this.initWidth);
   },
   methods: {
+    initWidth() {
+      this.imgs = this.$refs.slideImg;
+      this.widthImg = this.$refs.slide.offsetWidth;
+      this.imgs.forEach((img, index) => {
+        img.style.left = this.widthImg * index + "px";
+      });
+    },
     slide(x_diff = Math.floor(this.widthImg / 50)) {
       var diff =
         this.widthImg +
@@ -151,6 +150,9 @@ export default {
       });
       this.loop && this.autoSlide();
     }
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.initWidth);
   }
 };
 </script>
@@ -158,9 +160,7 @@ export default {
 
 <style lang="scss" scoped>
 $height: 16vh;
-$width: 100vw;
 .outer-slide {
-  width: $width;
   height: $height;
   box-sizing: border-box;
   position: relative;
